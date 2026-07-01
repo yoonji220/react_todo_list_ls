@@ -4,6 +4,9 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState, useMemo, useRef, useEffect } from "react";
 import Todo from "./Todo";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import formatDate from "./utils/date";
 
 function App() {
   const [todo, setTodo] = useState(() => {
@@ -56,16 +59,25 @@ function App() {
       ),
     );
   };
+
+  const [date, setDate] = useState(new Date());
+
   return (
     <>
       <div className="container">
         <h1>My todo App</h1>
         <Form
+          // onSubmit={e => {
+          //   e.preventDefault();
+          //   addTodo(e.target.todo.value, e.target.due.value);
+          //   inputRef.current.value = "";
+          //   e.target.due.value = "";
+          // }}
           onSubmit={e => {
             e.preventDefault();
-            addTodo(e.target.todo.value, e.target.due.value);
+            addTodo(e.target.todo.value, formatDate(date));
             inputRef.current.value = "";
-            e.target.due.value = "";
+            setDate(new Date());
           }}
         >
           <Form.Group className="mb-3" controlId="todoInput">
@@ -79,8 +91,17 @@ function App() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="dueInput">
             <Form.Label>만기일</Form.Label>
-            <Form.Control type="date" name="due" />
+            <DatePicker
+              dateFormat="yyyy-MM-dd"
+              selected={date}
+              onChange={date => setDate(date)}
+              className="form-control"
+            />
           </Form.Group>
+          {/* <Form.Group className="mb-3" controlId="dueInput">
+            <Form.Label>만기일</Form.Label>
+            <Form.Control type="date" name="due" />
+          </Form.Group> */}
 
           <Button type="submit" variant="primary">
             입력

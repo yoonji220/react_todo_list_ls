@@ -1,16 +1,15 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import formatDate from "./utils/date";
 
 export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [isChecked, setIsChecked] = useState(data.checked);
   const [mode, setMode] = useState("read");
   const [title, setTitle] = useState(data.title);
-  const [due, setDue] = useState(data.due || "");
-
-  const handleDueChange = e => {
-    setDue(e.target.value);
-  };
+  const [dueDate, setDueDate] = useState(data.due ? new Date(data.due) : null);
 
   const handleChecked = () => {
     const value = !isChecked;
@@ -94,7 +93,7 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
         <Form
           onSubmit={e => {
             e.preventDefault();
-            updateTodo(data.id, title, due);
+            updateTodo(data.id, title, formatDate(dueDate));
             setMode("read");
           }}
         >
@@ -108,11 +107,11 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
           </Form.Group>
           <Form.Group className="mb-3" controlId={`todoDue-${data.id}`}>
             <Form.Label>만기일</Form.Label>
-            <Form.Control
-              type="date"
-              name="due"
-              value={due}
-              onChange={handleDueChange}
+            <DatePicker
+              dateFormat="yyyy-MM-dd"
+              selected={dueDate}
+              onChange={date => setDueDate(date)}
+              className="form-control"
             />
           </Form.Group>
           <div className="d-flex gap-2">
