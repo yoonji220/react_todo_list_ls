@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
+import Todo from "./Todo";
 
 function App() {
   const [todo, setTodo] = useState([
@@ -21,8 +22,8 @@ function App() {
           <Button variant="primary">입력</Button>
         </Form>
         <hr />
-        {todo.map(item => {
-          return <Todo data={item} />;
+        {todo.map((item, idx) => {
+          return <Todo key={idx} data={item} />;
         })}
       </div>
     </>
