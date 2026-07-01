@@ -42,6 +42,11 @@ function App() {
     setTodo(prev => prev.filter(item => item.id !== _id));
   };
 
+  const updateTodo = (_id, _title) => {
+    setTodo(prev =>
+      prev.map(item => (item.id === _id ? { ...item, title: _title } : item)),
+    );
+  };
   return (
     <>
       <div className="container">
@@ -74,6 +79,7 @@ function App() {
               data={item}
               checkUpdate={checkUpdate}
               deleteTodo={deleteTodo}
+              updateTodo={updateTodo}
             />
           );
         })}

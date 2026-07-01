@@ -1,11 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [isChecked, setIsChecked] = useState(data.checked);
   const [mode, setMode] = useState("read");
-  const inputRef = useRef(null);
   const [title, setTitle] = useState(data.title);
 
   const handleChecked = () => {
@@ -29,7 +28,9 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const changeToRead = () => {
     setMode("read");
   };
-
+  const handleChange = e => {
+    setTitle(e.target.value);
+  };
   return (
     <>
       {mode === "read" ? (
@@ -55,14 +56,12 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
         <Form
           onSubmit={e => {
             e.preventDefault();
-            updateTodo(data.id, e.target.todo.value);
-            inputRef.current.value = "";
-            //e.target.reset();
+            updateTodo(data.id, title);
+            setMode("read");
           }}
         >
           <Form.Group className="mb-3" controlId="todoInput">
             <Form.Control
-              ref={inputRef}
               type="text"
               name="todo"
               value={title}
