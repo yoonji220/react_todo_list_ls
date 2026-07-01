@@ -2,8 +2,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import formatDate from "./utils/date";
+import formatDate, { getDDayInfo } from "./utils/date";
 
 export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [isChecked, setIsChecked] = useState(data.checked);
@@ -34,32 +33,6 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   };
   const handleChange = e => {
     setTitle(e.target.value);
-  };
-
-  const getDDayInfo = due => {
-    if (!due) return { text: "", className: "" };
-
-    const today = new Date();
-    const dueDate = new Date(due);
-
-    today.setHours(0, 0, 0, 0);
-    dueDate.setHours(0, 0, 0, 0);
-
-    const diffDays = Math.floor((dueDate - today) / (1000 * 60 * 60 * 24));
-
-    if (diffDays > 3) {
-      return { text: `D-${diffDays}`, className: "" };
-    }
-
-    if (diffDays > 0) {
-      return { text: `D-${diffDays}`, className: "due-soon" };
-    }
-
-    if (diffDays === 0) {
-      return { text: "D-Day", className: "due-today" };
-    }
-
-    return { text: `D+${Math.abs(diffDays)}`, className: "due-over" };
   };
 
   const dday = getDDayInfo(data.due);
