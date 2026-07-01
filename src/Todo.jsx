@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-export default function Todo({ data, checkUpdate, deleteTodo }) {
+export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [isChecked, setIsChecked] = useState(data.checked);
+  const [mode, setMode] = useState("read");
+  const inputRef = useRef(null);
+  const [title, setTitle] = useState(data.title);
+
   const handleChecked = () => {
     const value = !isChecked;
     //setIsChecked(value)
@@ -19,24 +23,67 @@ export default function Todo({ data, checkUpdate, deleteTodo }) {
     }
   };
 
-  return (
-    <div className="d-flex justify-content-between mb-2">
-      <Form.Check // prettier-ignore
-        type="checkbox"
-        checked={data.checked}
-        id={`todo-${data.id}`}
-        label={data.title}
-        onChange={handleChecked}
-      />
-      <div className="d-flex gap-2">
-        <Button variant="secondary" size="sm">
-          수정
-        </Button>
+  const changeToEdit = () => {
+    setMode("edit");
+  };
+  const changeToRead = () => {
+    setMode("read");
+  };
 
-        <Button variant="danger" size="sm" onClick={deleteItem}>
-          삭제
-        </Button>
-      </div>
-    </div>
+  return (
+    <>
+      {mode === "read" ? (
+        <div className="d-flex justify-content-between mb-2">
+          <Form.Check // prettier-ignore
+            type="checkbox"
+            checked={data.checked}
+            id={`todo-${data.id}`}
+            label={data.title}
+            onChange={handleChecked}
+          />
+          <div className="d-flex gap-2">
+            <Button variant="secondary" size="sm" onClick={changeToEdit}>
+              수정
+            </Button>
+
+            <Button variant="danger" size="sm" onClick={deleteItem}>
+              삭제
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <Form
+          onSubmit={e => {
+            e.preventDefault();
+            updateTodo(data.id, e.target.todo.value);
+            inputRef.current.value = "";
+            //e.target.reset();
+          }}
+        >
+          <Form.Group className="mb-3" controlId="todoInput">
+            <Form.Control
+              ref={inputRef}
+              type="text"
+              name="todo"
+              value={title}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <div className="d-flex gap-2">
+            <Button type="submit" variant="primary" size="sm">
+              저장
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={changeToRead}
+            >
+              취소
+            </Button>
+          </div>
+        </Form>
+      )}
+    </>
   );
 }
