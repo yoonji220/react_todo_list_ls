@@ -7,6 +7,7 @@ import Todo from "./Todo";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import formatDate from "./utils/date";
+import { sortTodo } from "./utils/todo";
 
 function App() {
   const [todo, setTodo] = useState(() => {
@@ -61,11 +62,12 @@ function App() {
   };
 
   const [date, setDate] = useState(new Date());
+  const sortedTodo = useMemo(() => sortTodo(todo), [todo]);
 
   return (
     <>
       <div className="container">
-        <h1>My todo App</h1>
+        <h1>Today todo</h1>
         <Form
           onSubmit={e => {
             e.preventDefault();
@@ -97,7 +99,7 @@ function App() {
           </Button>
         </Form>
         <hr />
-        {todo.map((item, idx) => {
+        {sortedTodo.map((item, idx) => {
           return (
             <Todo
               key={idx}
