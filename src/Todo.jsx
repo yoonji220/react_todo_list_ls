@@ -10,6 +10,11 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [title, setTitle] = useState(data.title);
   const [dueDate, setDueDate] = useState(data.due ? new Date(data.due) : null);
   const [memo, setMemo] = useState(data.memo || "");
+  const [showMemo, setShowMemo] = useState(false);
+
+  const toggleMemo = () => {
+    setShowMemo(prev => !prev);
+  };
 
   const handleChecked = () => {
     const value = !isChecked;
@@ -66,12 +71,26 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
               만기일: {data.due} / {dday.text}
             </small>
           )}
+          {data.memo && (
+            <>
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0"
+                onClick={toggleMemo}
+              >
+                {showMemo ? "메모 접기" : "메모 보기"}
+              </Button>
+
+              {showMemo && <div className="todo-memo">{data.memo}</div>}
+            </>
+          )}
         </div>
       ) : (
         <Form
           onSubmit={e => {
             e.preventDefault();
-            updateTodo(data.id, title, formatDate(dueDate));
+            updateTodo(data.id, title, formatDate(dueDate), memo);
             setMode("read");
           }}
         >
@@ -90,6 +109,15 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
               selected={dueDate}
               onChange={date => setDueDate(date)}
               className="form-control"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId={`todoMemo-${data.id}`}>
+            <Form.Label>메모</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={memo}
+              onChange={e => setMemo(e.target.value)}
             />
           </Form.Group>
           <div className="d-flex gap-2">
