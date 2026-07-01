@@ -2,16 +2,22 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Todo from "./Todo";
 
 function App() {
-  const [todo, setTodo] = useState([
-    { id: 1, title: "html 배우기", checked: false },
-    { id: 2, title: "css 배우기", checked: false },
-  ]);
+  const [todo, setTodo] = useState(() => {
+    const todoStrFromStorage = window.localStorage.getItem("todo");
+    return todoStrFromStorage ? JSON.parse(todoStrFromStorage) : [];
+  });
+  console.log(todo);
 
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    const todoString = JSON.stringify(todo); // 할일 배열 -> json 문자열 변환
+    window.localStorage.setItem("todo", todoString);
+  }, [todo]);
 
   const nextId = useMemo(() => {
     const maxId = todo.reduce((acc, current) => {
