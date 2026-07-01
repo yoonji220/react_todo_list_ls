@@ -27,11 +27,12 @@ function App() {
     return maxId + 1;
   }, [todo]);
 
-  const addTodo = title => {
+  const addTodo = (title, due) => {
     const newTodo = {
       id: nextId,
       title,
       checked: false,
+      due,
     };
 
     setTodo(prev => [...prev, newTodo]);
@@ -48,9 +49,11 @@ function App() {
     setTodo(prev => prev.filter(item => item.id !== _id));
   };
 
-  const updateTodo = (_id, _title) => {
+  const updateTodo = (_id, _title, _due) => {
     setTodo(prev =>
-      prev.map(item => (item.id === _id ? { ...item, title: _title } : item)),
+      prev.map(item =>
+        item.id === _id ? { ...item, title: _title, due: _due } : item,
+      ),
     );
   };
   return (
@@ -60,8 +63,9 @@ function App() {
         <Form
           onSubmit={e => {
             e.preventDefault();
-            addTodo(e.target.todo.value);
+            addTodo(e.target.todo.value, e.target.due.value);
             inputRef.current.value = "";
+            e.target.due.value = "";
           }}
         >
           <Form.Group className="mb-3" controlId="todoInput">
@@ -73,6 +77,11 @@ function App() {
               placeholder="할일을 입력하세요."
             />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="dueInput">
+            <Form.Label>만기일</Form.Label>
+            <Form.Control type="date" name="due" />
+          </Form.Group>
+
           <Button type="submit" variant="primary">
             입력
           </Button>

@@ -6,6 +6,11 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [isChecked, setIsChecked] = useState(data.checked);
   const [mode, setMode] = useState("read");
   const [title, setTitle] = useState(data.title);
+  const [due, setDue] = useState(data.due || "");
+
+  const handleDueChange = e => {
+    setDue(e.target.value);
+  };
 
   const handleChecked = () => {
     const value = !isChecked;
@@ -42,6 +47,7 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
             label={data.title}
             onChange={handleChecked}
           />
+          {data.due && <small>만기일: {data.due}</small>}
           <div className="d-flex gap-2">
             <Button variant="secondary" size="sm" onClick={changeToEdit}>
               수정
@@ -56,7 +62,7 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
         <Form
           onSubmit={e => {
             e.preventDefault();
-            updateTodo(data.id, title);
+            updateTodo(data.id, title, due);
             setMode("read");
           }}
         >
@@ -66,6 +72,15 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
               name="todo"
               value={title}
               onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId={`todoDue-${data.id}`}>
+            <Form.Label>만기일</Form.Label>
+            <Form.Control
+              type="date"
+              name="due"
+              value={due}
+              onChange={handleDueChange}
             />
           </Form.Group>
           <div className="d-flex gap-2">
