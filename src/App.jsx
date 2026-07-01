@@ -32,12 +32,13 @@ function App() {
     return maxId + 1;
   }, [todo]);
 
-  const addTodo = (title, due) => {
+  const addTodo = (title, due, memo) => {
     const newTodo = {
       id: nextId,
       title,
       checked: false,
       due,
+      memo,
     };
 
     setTodo(prev => [...prev, newTodo]);
@@ -54,10 +55,12 @@ function App() {
     setTodo(prev => prev.filter(item => item.id !== _id));
   };
 
-  const updateTodo = (_id, _title, _due) => {
+  const updateTodo = (_id, _title, _due, _memo) => {
     setTodo(prev =>
       prev.map(item =>
-        item.id === _id ? { ...item, title: _title, due: _due } : item,
+        item.id === _id
+          ? { ...item, title: _title, due: _due, memo: _memo }
+          : item,
       ),
     );
   };
@@ -80,8 +83,9 @@ function App() {
         <Form
           onSubmit={e => {
             e.preventDefault();
-            addTodo(e.target.todo.value, formatDate(date));
+            addTodo(e.target.todo.value, formatDate(date), e.target.memo.value);
             inputRef.current.value = "";
+            e.target.memo.value = "";
             setDate(new Date());
           }}
         >
@@ -101,6 +105,15 @@ function App() {
               onChange={date => setDate(date)}
               dateFormat="yyyy-MM-dd"
               className="form-control w-100"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="memoInput">
+            <Form.Label>메모</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="memo"
+              placeholder="메모를 입력하세요."
             />
           </Form.Group>
           <Button type="submit" variant="primary">

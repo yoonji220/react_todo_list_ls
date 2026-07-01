@@ -9,6 +9,7 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const [mode, setMode] = useState("read");
   const [title, setTitle] = useState(data.title);
   const [dueDate, setDueDate] = useState(data.due ? new Date(data.due) : null);
+  const [memo, setMemo] = useState(data.memo || "");
 
   const handleChecked = () => {
     const value = !isChecked;
