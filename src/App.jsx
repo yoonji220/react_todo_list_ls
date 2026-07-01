@@ -30,6 +30,18 @@ function App() {
 
     setTodo(prev => [...prev, newTodo]);
   };
+
+  const checkUpdate = (_id, _value) => {
+    /*_id와 일치하는 요소의 checked 속성의 값을 _value로 변경 todo도 업데이트 */
+    setTodo(prev =>
+      prev.map(item => (item.id === _id ? { ...item, checked: _value } : item)),
+    );
+  };
+
+  const deleteTodo = _id => {
+    setTodo(prev => prev.filter(item => item.id !== _id));
+  };
+
   return (
     <>
       <div className="container">
@@ -56,7 +68,14 @@ function App() {
         </Form>
         <hr />
         {todo.map((item, idx) => {
-          return <Todo key={idx} data={item} />;
+          return (
+            <Todo
+              key={idx}
+              data={item}
+              checkUpdate={checkUpdate}
+              deleteTodo={deleteTodo}
+            />
+          );
         })}
       </div>
     </>
