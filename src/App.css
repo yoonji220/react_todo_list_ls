@@ -2,3 +2,30 @@
   text-decoration: line-through;
   color: #ccc;
 }
+
+.due-soon {
+  color: #fd7e14;
+  font-weight: 600;
+}
+
+.due-today {
+  color: #dc3545;
+  font-weight: 700;
+  animation: blink 1.2s infinite;
+}
+
+.due-over {
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}

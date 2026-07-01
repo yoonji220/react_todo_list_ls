@@ -36,6 +36,34 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   const handleChange = e => {
     setTitle(e.target.value);
   };
+
+  const getDDayInfo = due => {
+    if (!due) return { text: "", className: "" };
+
+    const today = new Date();
+    const dueDate = new Date(due);
+
+    today.setHours(0, 0, 0, 0);
+    dueDate.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((dueDate - today) / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 3) {
+      return { text: `D-${diffDays}`, className: "" };
+    }
+
+    if (diffDays > 0) {
+      return { text: `D-${diffDays}`, className: "due-soon" };
+    }
+
+    if (diffDays === 0) {
+      return { text: "D-Day", className: "due-today" };
+    }
+
+    return { text: `D+${Math.abs(diffDays)}`, className: "due-over" };
+  };
+
+  const dday = getDDayInfo(data.due);
   return (
     <>
       {mode === "read" ? (
@@ -47,7 +75,11 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
             label={data.title}
             onChange={handleChecked}
           />
-          {data.due && <small>만기일: {data.due}</small>}
+          {data.due && (
+            <small className={dday.className}>
+              만기일: {data.due} / {dday.text}
+            </small>
+          )}
           <div className="d-flex gap-2">
             <Button variant="secondary" size="sm" onClick={changeToEdit}>
               수정
