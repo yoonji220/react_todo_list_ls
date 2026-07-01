@@ -11,3 +11,15 @@ export function sortTodo(todo) {
     return new Date(a.due) - new Date(b.due);
   });
 }
+
+export function getTodoStats(todo) {
+  const total = todo.length;
+  const completed = todo.filter(item => item.checked).length;
+  const remain = total - completed;
+
+  return {
+    total,
+    completed,
+    remain,
+  };
+}

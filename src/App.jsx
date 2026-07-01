@@ -7,7 +7,8 @@ import Todo from "./Todo";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import formatDate from "./utils/date";
-import { sortTodo } from "./utils/todo";
+import { sortTodo, getTodoStats } from "./utils/todo";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 function App() {
   const [todo, setTodo] = useState(() => {
@@ -63,11 +64,19 @@ function App() {
 
   const [date, setDate] = useState(new Date());
   const sortedTodo = useMemo(() => sortTodo(todo), [todo]);
+  const stats = useMemo(() => getTodoStats(todo), [todo]);
+  const progress =
+    stats.total === 0 ? 0 : Math.round((stats.completed / stats.total) * 100);
 
   return (
     <>
       <div className="container">
         <h1>Today todo</h1>
+        <p className="text-secondary">
+          전체 {stats.total}개 · 남은 {stats.remain}개 · 완료 {stats.completed}
+          개
+        </p>
+        <ProgressBar now={progress} label={`${progress}%`} className="mb-4" />
         <Form
           onSubmit={e => {
             e.preventDefault();
