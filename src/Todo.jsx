@@ -66,28 +66,32 @@ export default function Todo({ data, checkUpdate, deleteTodo, updateTodo }) {
   return (
     <>
       {mode === "read" ? (
-        <div className="d-flex justify-content-between mb-2">
-          <Form.Check // prettier-ignore
-            type="checkbox"
-            checked={data.checked}
-            id={`todo-${data.id}`}
-            label={data.title}
-            onChange={handleChecked}
-          />
+        <div className="todo-item mb-3">
+          <div className="d-flex justify-content-between align-items-start">
+            <Form.Check
+              type="checkbox"
+              checked={data.checked}
+              id={`todo-${data.id}`}
+              label={data.title}
+              onChange={handleChecked}
+            />
+
+            <div className="d-flex gap-2">
+              <Button variant="secondary" size="sm" onClick={changeToEdit}>
+                수정
+              </Button>
+
+              <Button variant="danger" size="sm" onClick={deleteItem}>
+                삭제
+              </Button>
+            </div>
+          </div>
+
           {data.due && (
-            <small className={dday.className}>
+            <small className={`todo-due ${dday.className}`}>
               만기일: {data.due} / {dday.text}
             </small>
           )}
-          <div className="d-flex gap-2">
-            <Button variant="secondary" size="sm" onClick={changeToEdit}>
-              수정
-            </Button>
-
-            <Button variant="danger" size="sm" onClick={deleteItem}>
-              삭제
-            </Button>
-          </div>
         </div>
       ) : (
         <Form

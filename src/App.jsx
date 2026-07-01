@@ -67,12 +67,6 @@ function App() {
       <div className="container">
         <h1>My todo App</h1>
         <Form
-          // onSubmit={e => {
-          //   e.preventDefault();
-          //   addTodo(e.target.todo.value, e.target.due.value);
-          //   inputRef.current.value = "";
-          //   e.target.due.value = "";
-          // }}
           onSubmit={e => {
             e.preventDefault();
             addTodo(e.target.todo.value, formatDate(date));
@@ -92,17 +86,12 @@ function App() {
           <Form.Group className="mb-3" controlId="dueInput">
             <Form.Label>만기일</Form.Label>
             <DatePicker
-              dateFormat="yyyy-MM-dd"
               selected={date}
               onChange={date => setDate(date)}
-              className="form-control"
+              dateFormat="yyyy-MM-dd"
+              className="form-control w-100"
             />
           </Form.Group>
-          {/* <Form.Group className="mb-3" controlId="dueInput">
-            <Form.Label>만기일</Form.Label>
-            <Form.Control type="date" name="due" />
-          </Form.Group> */}
-
           <Button type="submit" variant="primary">
             입력
           </Button>

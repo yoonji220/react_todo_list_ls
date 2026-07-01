@@ -29,3 +29,17 @@
     opacity: 0.6;
   }
 }
+
+.todo-due {
+  display: block;
+  margin-left: 24px;
+  margin-top: 4px;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container {
+  width: 100%;
+}
